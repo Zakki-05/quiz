@@ -1,190 +1,240 @@
-// Quiz Data
-const questions = [
-  {
-    question: "What is the full form of PDF?",
-    option1: "Portable Document Format",
-    option2: "Personal Data File",
-    option3: "Printable Document Form",
-    option4: "Public Document Folder",
-    correctAnswer: "option1"
-  },
-  {
-    question: "Which software is used for creating spreadsheets?",
-    option1: "Microsoft Word",
-    option2: "Microsoft Excel",
-    option3: "Microsoft PowerPoint",
-    option4: "Microsoft Access",
-    correctAnswer: "option2"
-  },
-  {
-    question: "What is the default file extension of a Microsoft Word document (2007 and later)?",
-    option1: ".txt",
-    option2: ".doc",
-    option3: ".docx",
-    option4: ".word",
-    correctAnswer: "option3"
-  },
-  {
-    question: "Which of the following is an example of an operating system?",
-    option1: "Google Chrome",
-    option2: "Microsoft Excel",
-    option3: "Windows 11",
-    option4: "Adobe Photoshop",
-    correctAnswer: "option3"
-  },
-  {
-    question: "What does 'URL' stand for?",
-    option1: "Uniform Resource Locator",
-    option2: "Universal Reference Link",
-    option3: "Unified Resource Library",
-    option4: "Unique Retrieval Locator",
-    correctAnswer: "option1"
-  },
-  {
-    question: "Which key combination is used to copy text in most applications?",
-    option1: "Ctrl + X",
-    option2: "Ctrl + C",
-    option3: "Ctrl + V",
-    option4: "Ctrl + Z",
-    correctAnswer: "option2"
-  },
-  {
-    question: "Which of the following is NOT a web browser?",
-    option1: "Mozilla Firefox",
-    option2: "Google Chrome",
-    option3: "Microsoft Edge",
-    option4: "Microsoft Word",
-    correctAnswer: "option4"
-  },
-  {
-    question: "What is the function of the 'Ctrl + Z' shortcut?",
-    option1: "Redo an action",
-    option2: "Undo an action",
-    option3: "Paste text",
-    option4: "Save a file",
-    correctAnswer: "option2"
-  },
-  {
-    question: "Which software is used for creating presentations?",
-    option1: "Microsoft Excel",
-    option2: "Microsoft PowerPoint",
-    option3: "Microsoft Word",
-    option4: "Microsoft Access",
-    correctAnswer: "option2"
-  },
-  {
-    question: "What does 'CPU' stand for?",
-    option1: "Central Processing Unit",
-    option2: "Computer Processing Unit",
-    option3: "Central Power Unit",
-    option4: "Control Processing Unit",
-    correctAnswer: "option1"
-  }
-];
-
-// DOM Elements
-const quizElement = document.getElementById('quiz');
-const resultElement = document.getElementById('result');
-const questionElement = document.getElementById('question');
-const optionElements = [
-  document.getElementById('option1'),
-  document.getElementById('option2'),
-  document.getElementById('option3'),
-  document.getElementById('option4')
-];
-const optionInputs = document.querySelectorAll('input[name="option"]');
-const nextButton = document.getElementById('next-btn');
-const restartButton = document.getElementById('restart-btn');
-const scoreElement = document.getElementById('score');
-const currentQuestionElement = document.getElementById('current-question');
-const totalQuestionsElement = document.getElementById('total-questions');
-
-// Quiz State
-let currentQuestionIndex = 0;
-let score = 0;
-const totalQuestions = questions.length;
-
-// Initialize Quiz
-function initQuiz() {
-  totalQuestionsElement.textContent = totalQuestions;
-  loadQuestion();
-}
-
-// Load Question
-function loadQuestion() {
-  if (currentQuestionIndex >= totalQuestions) {
-    showResult();
-    return;
-  }
-
-  const currentQuestion = questions[currentQuestionIndex];
-  currentQuestionElement.textContent = currentQuestionIndex + 1;
-  
-  questionElement.textContent = currentQuestion.question;
-  
-  optionElements.forEach((element, index) => {
-    element.textContent = currentQuestion[`option${index + 1}`];
-  });
-
-  // Clear selection
-  optionInputs.forEach(input => {
-    input.checked = false;
-  });
-}
-
-// Check Answer and Move to Next Question
-function nextQuestion() {
-  const selectedOption = document.querySelector('input[name="option"]:checked');
-  
-  if (!selectedOption) {
-    alert('Please select an answer!');
-    return;
-  }
-  
-  // Check if answer is correct
-  if (selectedOption.value === questions[currentQuestionIndex].correctAnswer) {
-    score++;
-  }
-  
-  currentQuestionIndex++;
-  
-  if (currentQuestionIndex < totalQuestions) {
-    loadQuestion();
-  } else {
-    showResult();
-  }
-}
-
-// Show Final Result
-function showResult() {
-  quizElement.style.display = 'none';
-  resultElement.style.display = 'block';
-  scoreElement.textContent = `Your score: ${score} out of ${totalQuestions}`;
-}
-
-// Restart Quiz
-function restartQuiz() {
-  currentQuestionIndex = 0;
-  score = 0;
-  quizElement.style.display = 'block';
-  resultElement.style.display = 'none';
-  loadQuestion();
-}
-
-// Event Listeners
-nextButton.addEventListener('click', nextQuestion);
-restartButton.addEventListener('click', restartQuiz);
-
-// Keyboard Navigation
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    if (resultElement.style.display === 'block') {
-      restartQuiz();
-    } else {
-      nextQuestion();
+document.addEventListener('DOMContentLoaded', function () {
+  // Quiz questions and answers
+  const quizData = [
+    {
+      question: "What does CPU stand for?",
+      options: [
+        "Central Processing Unit",
+        "Computer Personal Unit",
+        "Central Process Unit",
+        "Central Programming Unit"
+      ],
+      correct: 0
+    },
+    {
+      question: "Which of these is not a programming language?",
+      options: [
+        "Python",
+        "Java",
+        "HTML",
+        "C++"
+      ],
+      correct: 2
+    },
+    {
+      question: "What is the main function of RAM in a computer?",
+      options: [
+        "Permanent storage of data",
+        "Processing graphics",
+        "Temporary storage for quick access",
+        "Managing network connections"
+      ],
+      correct: 2
+    },
+    {
+      question: "Which protocol is used to send email?",
+      options: [
+        "HTTP",
+        "FTP",
+        "SMTP",
+        "SSH"
+      ],
+      correct: 2
+    },
+    {
+      question: "What does 'www' stand for in a website URL?",
+      options: [
+        "World Wide Web",
+        "Web World Wide",
+        "Wide Web World",
+        "World Web Wide"
+      ],
+      correct: 0
+    },
+    {
+      question: "Which of these is an operating system?",
+      options: [
+        "Microsoft Word",
+        "Adobe Photoshop",
+        "Linux",
+        "Google Chrome"
+      ],
+      correct: 2
+    },
+    {
+      question: "What is the binary equivalent of the decimal number 10?",
+      options: [
+        "1010",
+        "1001",
+        "1100",
+        "1111"
+      ],
+      correct: 0
+    },
+    {
+      question: "Which company developed JavaScript?",
+      options: [
+        "Microsoft",
+        "Netscape",
+        "Google",
+        "Apple"
+      ],
+      correct: 1
+    },
+    {
+      question: "What does HTML stand for?",
+      options: [
+        "Hyper Text Markup Language",
+        "High Tech Markup Language",
+        "Hyperlinks and Text Markup Language",
+        "Home Tool Markup Language"
+      ],
+      correct: 0
+    },
+    {
+      question: "Which of these is a relational database management system?",
+      options: [
+        "MongoDB",
+        "MySQL",
+        "Redis",
+        "Elasticsearch"
+      ],
+      correct: 1
     }
-  }
-});
+  ];
 
-// Initialize the quiz when the page loads
-window.onload = initQuiz;
+  // DOM elements
+  const quizContainer = document.getElementById('quiz');
+  const resultContainer = document.getElementById('result');
+  const questionElement = document.getElementById('question');
+  const optionElements = [
+    document.getElementById('option1'),
+    document.getElementById('option2'),
+    document.getElementById('option3'),
+    document.getElementById('option4')
+  ];
+  const currentQuestionElement = document.getElementById('current-question');
+  const totalQuestionsElement = document.getElementById('total-questions');
+  const nextButton = document.getElementById('next-btn');
+  const restartButton = document.getElementById('restart-btn');
+  const scoreElement = document.getElementById('score');
+
+  // Create feedback element
+  const feedbackElement = document.createElement('div');
+  feedbackElement.id = 'feedback';
+  feedbackElement.style.marginTop = '10px';
+  feedbackElement.style.minHeight = '20px';
+  quizContainer.insertBefore(feedbackElement, nextButton);
+
+  // Quiz variables
+  let currentQuestion = 0;
+  let score = 0;
+  let selectedOption = null;
+
+  // Initialize the quiz
+  function initQuiz() {
+    totalQuestionsElement.textContent = quizData.length;
+    showQuestion();
+  }
+
+  // Display the current question and options
+  function showQuestion() {
+    const questionData = quizData[currentQuestion];
+    questionElement.textContent = questionData.question;
+
+    optionElements.forEach((option, index) => {
+      option.textContent = questionData.options[index];
+      // Reset any previous highlighting
+      option.parentElement.style.backgroundColor = '';
+      option.parentElement.style.color = '';
+    });
+
+    currentQuestionElement.textContent = currentQuestion + 1;
+
+    // Clear previous selection and feedback
+    document.querySelectorAll('input[name="option"]').forEach(radio => {
+      radio.checked = false;
+    });
+    feedbackElement.textContent = '';
+    feedbackElement.style.color = '';
+
+    selectedOption = null;
+    nextButton.disabled = true;
+    nextButton.textContent = 'Next';
+  }
+
+  // Check the selected answer and provide feedback
+  function checkAnswer() {
+    if (selectedOption === null) return false;
+    
+    const questionData = quizData[currentQuestion];
+    const isCorrect = selectedOption === questionData.correct;
+    
+    if (!isCorrect) {
+      // Highlight the correct answer in green
+      optionElements[questionData.correct].parentElement.style.backgroundColor = '#4CAF50';
+      optionElements[questionData.correct].parentElement.style.color = 'white';
+      
+      // Highlight the selected (wrong) answer in red
+      optionElements[selectedOption].parentElement.style.backgroundColor = '#f44336';
+      optionElements[selectedOption].parentElement.style.color = 'white';
+      
+      feedbackElement.textContent = `Incorrect! The correct answer is: ${questionData.options[questionData.correct]}`;
+      feedbackElement.style.color = '#f44336';
+    } else {
+      feedbackElement.textContent = 'Correct!';
+      feedbackElement.style.color = '#4CAF50';
+    }
+    
+    return isCorrect;
+  }
+
+  // Event listeners for option selection
+  document.querySelectorAll('input[name="option"]').forEach((radio, index) => {
+    radio.addEventListener('change', () => {
+      selectedOption = index;
+      nextButton.disabled = false;
+    });
+  });
+
+  // Next button click handler
+  nextButton.addEventListener('click', () => {
+    const isCorrect = checkAnswer();
+    
+    if (isCorrect) {
+      score++;
+    }
+    
+    // Only proceed to next question after showing feedback
+    if (nextButton.textContent === 'Next') {
+      nextButton.textContent = 'Continue';
+    } else {
+      currentQuestion++;
+      
+      if (currentQuestion < quizData.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+  });
+
+  // Show the final result
+  function showResult() {
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+    scoreElement.textContent = `Your score: ${score} out of ${quizData.length}`;
+  }
+
+  // Restart button click handler
+  restartButton.addEventListener('click', () => {
+    currentQuestion = 0;
+    score = 0;
+    quizContainer.style.display = 'block';
+    resultContainer.style.display = 'none';
+    showQuestion();
+  });
+
+  // Start the quiz
+  initQuiz();
+});

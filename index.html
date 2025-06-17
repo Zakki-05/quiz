@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computer Quiz App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="quiz-container">
         <div class="quiz-header">
             <h1>Computer Quiz</h1>
-            <div class="progress">Question <span id="current-question">1</span> of <span id="total-questions">10</span></div>
+            <div class="progress">Question <span id="current-question">1</span> of <span id="total-questions">10</span>
+            </div>
         </div>
-        
+
+
+
         <div id="quiz">
             <div id="question" class="question"></div>
             <div class="options">
@@ -35,14 +40,15 @@
             </div>
             <button id="next-btn" class="btn">Next Question</button>
         </div>
-        
+
         <div id="result" class="result-container" style="display: none;">
             <h2>Quiz Completed!</h2>
             <p id="score">Your score: 0 out of 10</p>
             <button id="restart-btn" class="btn">Restart Quiz</button>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
+
 </html>
