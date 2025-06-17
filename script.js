@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentQuestion = 0;
   let score = 0;
   let selectedOption = null;
+  let answerChecked = false;
 
   // Initialize the quiz
   function initQuiz() {
@@ -147,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
       // Reset any previous highlighting
       option.parentElement.style.backgroundColor = '';
       option.parentElement.style.color = '';
+      // Re-enable radio buttons
+      option.previousElementSibling.disabled = false;
     });
 
     currentQuestionElement.textContent = currentQuestion + 1;
@@ -159,8 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
     feedbackElement.style.color = '';
 
     selectedOption = null;
+    answerChecked = false;
     nextButton.disabled = true;
-    nextButton.textContent = 'Next';
+    nextButton.textContent = 'Submit Answer';
   }
 
   // Check the selected answer and provide feedback
@@ -170,6 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const questionData = quizData[currentQuestion];
     const isCorrect = selectedOption === questionData.correct;
     
+    // Disable all radio buttons after answer is submitted
+    document.querySelectorAll('input[name="option"]').forEach(radio => {
+      radio.disabled = true;
+    });
+
     if (!isCorrect) {
       // Highlight the correct answer in green
       optionElements[questionData.correct].parentElement.style.backgroundColor = '#4CAF50';
@@ -182,10 +191,16 @@ document.addEventListener('DOMContentLoaded', function () {
       feedbackElement.textContent = `Incorrect! The correct answer is: ${questionData.options[questionData.correct]}`;
       feedbackElement.style.color = '#f44336';
     } else {
+      // Highlight correct answer in green
+      optionElements[selectedOption].parentElement.style.backgroundColor = '#4CAF50';
+      optionElements[selectedOption].parentElement.style.color = 'white';
       feedbackElement.textContent = 'Correct!';
       feedbackElement.style.color = '#4CAF50';
+      score++;
     }
     
+    answerChecked = true;
+    nextButton.textContent = currentQuestion < quizData.length - 1 ? 'Next Question' : 'View Results';
     return isCorrect;
   }
 
@@ -197,17 +212,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Next button click handler
+  // Next/Submit button click handler
   nextButton.addEventListener('click', () => {
-    const isCorrect = checkAnswer();
-    
-    if (isCorrect) {
-      score++;
-    }
-    
-    // Only proceed to next question after showing feedback
-    if (nextButton.textContent === 'Next') {
-      nextButton.textContent = 'Continue';
+    if (!answerChecked) {
+      checkAnswer();
     } else {
       currentQuestion++;
       
